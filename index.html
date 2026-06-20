@@ -313,7 +313,7 @@
         <div>
           <label for="radius">Radius</label>
           <input id="radius" type="range" min="1" max="8" value="4" step="0.5">
-          <div class="value-row"><span id="radiusValue">4</span> LE</div>
+          <div class="value-row"><span id="radiusValue">4</span> cm</div>
         </div>
       </div>
     </section>
@@ -324,11 +324,11 @@
       <div class="observe-grid" aria-live="polite">
         <div class="metric">
           <span>ganzer Kreis</span>
-          <strong id="circleArea">50,27</strong>
+          <strong id="circleArea">50,27 cm²</strong>
         </div>
         <div class="metric">
           <span>Sektorfläche</span>
-          <strong id="sectorArea">12,57</strong>
+          <strong id="sectorArea">12,57 cm²</strong>
         </div>
         <div class="metric">
           <span>Winkel</span>
@@ -336,7 +336,7 @@
         </div>
         <div class="metric">
           <span>Radius</span>
-          <strong id="radiusMetric">4</strong>
+          <strong id="radiusMetric">4 cm</strong>
         </div>
       </div>
 
@@ -345,15 +345,15 @@
           <thead>
             <tr>
               <th>Öffnungswinkel</th>
-              <th>Sektorfläche</th>
-              <th>Kreisfläche</th>
+              <th>Sektorfläche in cm²</th>
+              <th>Kreisfläche in cm²</th>
             </tr>
           </thead>
           <tbody id="dataRows">
             <tr>
               <td>90°</td>
-              <td>12,57</td>
-              <td>50,27</td>
+              <td>12,57 cm²</td>
+              <td>50,27 cm²</td>
             </tr>
           </tbody>
         </table>
@@ -436,7 +436,7 @@
       ctx.fillStyle = "#1d2433";
       ctx.font = "700 16px system-ui, sans-serif";
       ctx.fillText(`α = ${state.angle}°`, 24, 34);
-      ctx.fillText(`r = ${state.radius}`, 24, 60);
+      ctx.fillText(`r = ${state.radius} cm`, 24, 60);
     }
 
     function updateGeoGebra() {
@@ -454,10 +454,10 @@
       const sector = circle * (state.angle / 360);
       angleValue.textContent = state.angle;
       radiusValue.textContent = state.radius.toLocaleString("de-DE");
-      circleArea.textContent = formatNumber(circle);
-      sectorArea.textContent = formatNumber(sector);
+      circleArea.textContent = `${formatNumber(circle)} cm²`;
+      sectorArea.textContent = `${formatNumber(sector)} cm²`;
       angleMetric.textContent = `${state.angle}°`;
-      radiusMetric.textContent = state.radius.toLocaleString("de-DE");
+      radiusMetric.textContent = `${state.radius.toLocaleString("de-DE")} cm`;
       drawFallback();
       updateGeoGebra();
     }
@@ -476,8 +476,8 @@
       const row = document.createElement("tr");
       row.innerHTML = `
         <td>${state.angle}°</td>
-        <td>${formatNumber(sector)}</td>
-        <td>${formatNumber(circle)}</td>
+        <td>${formatNumber(sector)} cm²</td>
+        <td>${formatNumber(circle)} cm²</td>
       `;
       dataRows.append(row);
     }
