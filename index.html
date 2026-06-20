@@ -1,0 +1,557 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Kreissektor entdecken</title>
+  <script src="https://www.geogebra.org/apps/deployggb.js"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #f6f7fb;
+      --panel: #ffffff;
+      --ink: #1d2433;
+      --muted: #657085;
+      --line: #d8deea;
+      --blue: #2f6fed;
+      --blue-2: #e8f0ff;
+      --green: #1f8a5f;
+      --yellow: #fff4cc;
+      --red: #c94a4a;
+      --shadow: 0 10px 24px rgba(36, 48, 75, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.45;
+    }
+
+    header {
+      background: #ffffff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .topbar {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 18px 22px;
+      display: flex;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.45rem, 2.5vw, 2.1rem);
+      letter-spacing: 0;
+    }
+
+    .lesson-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: var(--blue-2);
+      color: #174aa7;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: minmax(420px, 1.15fr) minmax(340px, 0.85fr);
+      gap: 18px;
+    }
+
+    section,
+    aside,
+    .card {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .visual-panel {
+      min-width: 0;
+      overflow: hidden;
+    }
+
+    .panel-head {
+      padding: 16px 18px 12px;
+      border-bottom: 1px solid var(--line);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .panel-head h2,
+    aside h2,
+    .card h3 {
+      margin: 0;
+      font-size: 1.05rem;
+    }
+
+    .ggb-wrap {
+      position: relative;
+      min-height: 420px;
+      background: linear-gradient(180deg, #ffffff 0%, #f8fbff 100%);
+    }
+
+    #ggb-element,
+    #fallbackCanvas {
+      width: 100%;
+      height: 420px;
+      display: block;
+    }
+
+    #fallbackCanvas {
+      position: absolute;
+      inset: 0;
+      background: #ffffff;
+    }
+
+    .ggb-note {
+      position: absolute;
+      right: 12px;
+      bottom: 12px;
+      max-width: 310px;
+      padding: 8px 10px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .controls {
+      padding: 16px 18px 18px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      border-top: 1px solid var(--line);
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 7px;
+    }
+
+    input[type="range"] {
+      width: 100%;
+      accent-color: var(--blue);
+    }
+
+    .value-row {
+      margin-top: 6px;
+      color: var(--muted);
+      font-weight: 650;
+    }
+
+    .task-panel {
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .intro {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .observe-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .metric {
+      padding: 12px;
+      border-radius: 8px;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+    }
+
+    .metric span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .metric strong {
+      font-size: 1.25rem;
+    }
+
+    .table-card {
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.93rem;
+    }
+
+    th,
+    td {
+      padding: 9px 10px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      color: #40506a;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+      color: #ffffff;
+      background: var(--blue);
+    }
+
+    button.secondary {
+      color: var(--ink);
+      background: #eef2f8;
+    }
+
+    button:focus-visible,
+    textarea:focus-visible,
+    input:focus-visible {
+      outline: 3px solid #9ebdff;
+      outline-offset: 2px;
+    }
+
+    textarea,
+    input[type="text"] {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 8px;
+      padding: 10px;
+      font: inherit;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 900px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+
+      .controls,
+      .observe-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="topbar">
+      <div>
+        <h1>Kreissektoren selbst entdecken</h1>
+        <p class="intro">Verändere Winkel und Radius. Sammle Muster, bevor du eine Regel formulierst.</p>
+      </div>
+      <span class="lesson-tag">Klasse 9 · Gymnasium</span>
+    </div>
+  </header>
+
+  <main>
+    <section class="visual-panel" aria-labelledby="visual-title">
+      <div class="panel-head">
+        <h2 id="visual-title">GeoGebra-Modell</h2>
+        <span class="small">Der blaue Teil ist der Kreissektor.</span>
+      </div>
+      <div class="ggb-wrap">
+        <div id="ggb-element"></div>
+        <canvas id="fallbackCanvas" width="900" height="560" aria-label="Dynamische Zeichnung eines Kreissektors"></canvas>
+        <div class="ggb-note" id="ggbStatus">GeoGebra wird geladen. Die Zeichnung darunter bleibt als Reserve sichtbar.</div>
+      </div>
+      <div class="controls" aria-label="Regler">
+        <div>
+          <label for="angle">Öffnungswinkel</label>
+          <input id="angle" type="range" min="10" max="360" value="90" step="5">
+          <div class="value-row"><span id="angleValue">90</span>° von 360°</div>
+        </div>
+        <div>
+          <label for="radius">Radius</label>
+          <input id="radius" type="range" min="1" max="8" value="4" step="0.5">
+          <div class="value-row"><span id="radiusValue">4</span> LE</div>
+        </div>
+      </div>
+    </section>
+
+    <aside class="task-panel">
+      <p class="intro">Bearbeite die zugehörigen Aufgaben auf dem Arbeitsblatt.</p>
+
+      <div class="observe-grid" aria-live="polite">
+        <div class="metric">
+          <span>ganzer Kreis</span>
+          <strong id="circleArea">50,27</strong>
+        </div>
+        <div class="metric">
+          <span>Sektorfläche</span>
+          <strong id="sectorArea">12,57</strong>
+        </div>
+        <div class="metric">
+          <span>Winkel</span>
+          <strong id="angleMetric">90°</strong>
+        </div>
+        <div class="metric">
+          <span>Radius</span>
+          <strong id="radiusMetric">4</strong>
+        </div>
+      </div>
+
+      <div class="card table-card">
+        <table>
+          <thead>
+            <tr>
+              <th>Öffnungswinkel</th>
+              <th>Sektorfläche</th>
+              <th>Kreisfläche</th>
+            </tr>
+          </thead>
+          <tbody id="dataRows">
+            <tr>
+              <td>90°</td>
+              <td>12,57</td>
+              <td>50,27</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="button-row">
+        <button id="addRow" type="button">Messwert übernehmen</button>
+      </div>
+
+    </aside>
+  </main>
+
+  <script>
+    const state = {
+      angle: 90,
+      radius: 4,
+      ggbReady: false
+    };
+
+    const angleInput = document.querySelector("#angle");
+    const radiusInput = document.querySelector("#radius");
+    const angleValue = document.querySelector("#angleValue");
+    const radiusValue = document.querySelector("#radiusValue");
+    const circleArea = document.querySelector("#circleArea");
+    const sectorArea = document.querySelector("#sectorArea");
+    const angleMetric = document.querySelector("#angleMetric");
+    const radiusMetric = document.querySelector("#radiusMetric");
+    const dataRows = document.querySelector("#dataRows");
+    const canvas = document.querySelector("#fallbackCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function formatNumber(value) {
+      return value.toLocaleString("de-DE", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    function drawFallback() {
+      const dpr = window.devicePixelRatio || 1;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = Math.round(rect.width * dpr);
+      canvas.height = Math.round(rect.height * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.clearRect(0, 0, rect.width, rect.height);
+
+      const cx = rect.width / 2;
+      const cy = rect.height / 2 + 12;
+      const maxRadius = Math.min(rect.width, rect.height) * 0.36;
+      const radiusPx = maxRadius * (state.radius / 8);
+      const start = -Math.PI / 2;
+      const end = start + (state.angle * Math.PI) / 180;
+
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = "#9aa7bd";
+      ctx.fillStyle = "#f9fbff";
+      ctx.beginPath();
+      ctx.arc(cx, cy, maxRadius, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(47, 111, 237, 0.28)";
+      ctx.strokeStyle = "#2f6fed";
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.arc(cx, cy, radiusPx, start, end);
+      ctx.closePath();
+      ctx.fill();
+      ctx.stroke();
+
+      ctx.strokeStyle = "#25324a";
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx, cy - radiusPx);
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(cx + Math.cos(end) * radiusPx, cy + Math.sin(end) * radiusPx);
+      ctx.stroke();
+
+      ctx.fillStyle = "#1d2433";
+      ctx.font = "700 16px system-ui, sans-serif";
+      ctx.fillText(`α = ${state.angle}°`, 24, 34);
+      ctx.fillText(`r = ${state.radius}`, 24, 60);
+    }
+
+    function updateGeoGebra() {
+      if (!state.ggbReady || !window.ggbApplet) return;
+      try {
+        window.ggbApplet.setValue("r", state.radius);
+        window.ggbApplet.setValue("alpha", (state.angle * Math.PI) / 180);
+      } catch (error) {
+        state.ggbReady = false;
+      }
+    }
+
+    function updateMetrics() {
+      const circle = Math.PI * state.radius * state.radius;
+      const sector = circle * (state.angle / 360);
+      angleValue.textContent = state.angle;
+      radiusValue.textContent = state.radius.toLocaleString("de-DE");
+      circleArea.textContent = formatNumber(circle);
+      sectorArea.textContent = formatNumber(sector);
+      angleMetric.textContent = `${state.angle}°`;
+      radiusMetric.textContent = state.radius.toLocaleString("de-DE");
+      drawFallback();
+      updateGeoGebra();
+    }
+
+    function setControls(angle, radius) {
+      state.angle = angle;
+      state.radius = radius;
+      angleInput.value = angle;
+      radiusInput.value = radius;
+      updateMetrics();
+    }
+
+    function addObservation() {
+      const circle = Math.PI * state.radius * state.radius;
+      const sector = circle * (state.angle / 360);
+      const row = document.createElement("tr");
+      row.innerHTML = `
+        <td>${state.angle}°</td>
+        <td>${formatNumber(sector)}</td>
+        <td>${formatNumber(circle)}</td>
+      `;
+      dataRows.append(row);
+    }
+
+    function initGeoGebra() {
+      if (!window.GGBApplet) {
+        document.querySelector("#ggbStatus").textContent = "GeoGebra konnte nicht geladen werden. Die Zeichnung funktioniert trotzdem.";
+        return;
+      }
+
+      const parameters = {
+        id: "ggbApplet",
+        appName: "classic",
+        width: 760,
+        height: 420,
+        perspective: "G",
+        showToolBar: false,
+        showToolBarHelp: false,
+        showAlgebraInput: false,
+        showMenuBar: false,
+        showResetIcon: false,
+        showFullscreenButton: false,
+        enableRightClick: false,
+        enableLabelDrags: false,
+        enableShiftDragZoom: false,
+        useBrowserForJS: true,
+        appletOnLoad: function(api) {
+          try {
+            api.evalCommand("A=(0,0)");
+            api.evalCommand("r=4");
+            api.evalCommand("alpha=90°");
+            api.evalCommand("B=(r,0)");
+            api.evalCommand("C=(r cos(alpha), r sin(alpha))");
+            api.evalCommand("k=Circle(A,r)");
+            api.evalCommand("s=CircularSector(A,B,C)");
+            api.evalCommand("bogen=CircularArc(A,B,C)");
+            api.setColor("s", 47, 111, 237);
+            api.setFilling("s", 0.28);
+            api.setLineThickness("s", 5);
+            api.setColor("k", 155, 167, 189);
+            api.setColor("bogen", 47, 111, 237);
+            api.setAxesVisible(true, true);
+            api.setGridVisible(false);
+            api.setCoordSystem(-9.4, 9.4, -5.2, 5.2);
+            state.ggbReady = true;
+            document.querySelector("#fallbackCanvas").style.opacity = "0";
+            document.querySelector("#fallbackCanvas").style.pointerEvents = "none";
+            document.querySelector("#ggbStatus").textContent = "GeoGebra ist aktiv. Nutze die Regler unter der Zeichnung.";
+            updateGeoGebra();
+          } catch (error) {
+            document.querySelector("#ggbStatus").textContent = "GeoGebra ist eingebunden, die Reservezeichnung bleibt sichtbar.";
+          }
+        }
+      };
+
+      const applet = new GGBApplet(parameters, true);
+      applet.inject("ggb-element");
+    }
+
+    angleInput.addEventListener("input", () => {
+      state.angle = Number(angleInput.value);
+      updateMetrics();
+    });
+
+    radiusInput.addEventListener("input", () => {
+      state.radius = Number(radiusInput.value);
+      updateMetrics();
+    });
+
+    document.querySelector("#addRow").addEventListener("click", addObservation);
+
+    window.addEventListener("resize", drawFallback);
+    updateMetrics();
+    window.addEventListener("load", initGeoGebra);
+  </script>
+</body>
+</html>
